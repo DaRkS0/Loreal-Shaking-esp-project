@@ -53,7 +53,7 @@ WebSocketsServer webSocket = WebSocketsServer(81);
 
 void webSocketEvent(uint8_t num, WStype_t type, uint8_t *payload, size_t length);
 void setupWIFI();
-
+void sendTXT(const char * payload);
 void setup()
 {
   // put your setup code here, to run once:
@@ -96,6 +96,9 @@ void setup()
 
 void loop()
 {
+  webSocket.loop();
+ 
+
   // put your main code here, to run repeatedly:
   // ── Read raw acceleration ──────────────────────────────────────────────────
   float ax, ay, az;
@@ -125,7 +128,7 @@ void loop()
       lastShakeTime = millis();
       Serial.print("SHAKE DETECTED! Dynamic mag: ");
       Serial.println(dynamicMag);
-      // sendUDP("SHAKE");
+      sendTXT("SHAKE");
     }
   }
 
@@ -163,7 +166,7 @@ void loop()
 
         Serial.print("PICKUP DETECTED! Gravity shift: ");
         Serial.println(gravityShift);
-        // sendUDP("PICKUP");
+        sendTXT("PICKUP");
       }
     }
     else
@@ -267,4 +270,13 @@ void readAccel(float &ax, float &ay, float &az)
   {
     ax = ay = az = 0;
   }
+}
+
+void sendTXT(const char * payload){
+
+   int connectedClients = webSocket.connectedClients(false);
+   for (size_t iuser = 0; iuser < connectedClients; iuser++)
+   {
+    webSocket.sendTXT(iuser, (uint8_t *)payload);
+   }
 }
