@@ -28,7 +28,7 @@ const int SHAKE_COOLDOWN = 500; // ms between sending signals
 //   by lifting but not by a gentle table bump.
 // PICKUP_SUSTAIN_MS: the change must persist this long to avoid false triggers
 //   from a momentary knock.
-const float PICKUP_DELTA = 1;                // m/s²
+const float PICKUP_DELTA = 2;                // m/s²
 const unsigned long PICKUP_SUSTAIN_MS = 300; // ms
 
 // Low-pass filter coefficient for gravity estimation (0 < α < 1).
@@ -49,7 +49,7 @@ bool inPickupCandidate = false;
 void readAccel(float &ax, float &ay, float &az);
 void setupMPU();
 
-WebSocketsServer webSocket = WebSocketsServer(81);
+WebSocketsServer webSocket = WebSocketsServer(9090);
 
 void webSocketEvent(uint8_t num, WStype_t type, uint8_t *payload, size_t length);
 void setupWIFI();
